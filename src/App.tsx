@@ -102,7 +102,7 @@ function App() {
         >
           <div className="row" onClick={() => getCharactersByPagination(page + 1)}>
             {characters.map((character: any) => {
-              return (<div className="col-md-6" key={character.id}>
+              return (<div className="col-md-6" key={character.id} data-testid="cardComponent">
                 <Card img={character.image} id={character.id} name={character.name} location={
                   character.location.name} />
               </div>)
