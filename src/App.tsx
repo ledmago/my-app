@@ -10,6 +10,22 @@ import { useLazyQuery, useQuery } from '@apollo/client';
 import { GET_CHARACTERS } from './queries';
 import InfiniteScroll from 'react-infinite-scroll-component';
 
+interface Character {
+  name: string;
+  image: string;
+  id: string;
+  status: string;
+  species: string;
+  type: string;
+  gender: string;
+  location: {
+    name: string
+  };
+  created: string
+
+
+}
+
 function App() {
   const [filter, setFilter] = useState(null);
   const [infoMorty, setInfoMorty] = useState({
@@ -20,8 +36,8 @@ function App() {
   });
   const [showModal, setShowModal] = useState<boolean>(false);
   const [getCharacters, { loading, error, data }] = useLazyQuery(GET_CHARACTERS);
-  const [page, setPage] = useState(1);
-  const [characters, setCharacters] = useState<any>([]);
+  const [page, setPage] = useState<number>(1);
+  const [characters, setCharacters] = useState<Character[]>([]);
   // console.log(characters, error)
 
   const getCharactersByPagination = async (page: number) => {
@@ -33,7 +49,7 @@ function App() {
         },
 
       }).then(data => {
-        setCharacters((prev: any) => [...prev, ...data.data.characters.results].sort((a: any, b: any) => Number(a.id) < Number(b.id) ? -1 : 1));
+        setCharacters((prev: Character[]) => [...prev, ...data.data.characters.results].sort((a: Character, b: Character) => Number(a.id) < Number(b.id) ? -1 : 1));
         setInfoRick(data.data.characters.info);
         setPage(prev => prev + 1);
       })
@@ -47,7 +63,7 @@ function App() {
         },
 
       }).then(data => {
-        setCharacters((prev: any) => [...prev, ...data.data.characters.results].sort((a: any, b: any) => Number(a.id) < Number(b.id) ? -1 : 1));
+        setCharacters((prev: Character[]) => [...prev, ...data.data.characters.results].sort((a: Character, b: Character) => Number(a.id) < Number(b.id) ? -1 : 1));
         setInfoMorty(data.data.characters.info);
         setPage(prev => prev + 1);
       })
