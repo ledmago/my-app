@@ -12,7 +12,10 @@ import InfiniteScroll from 'react-infinite-scroll-component';
 
 function App() {
   const [filter, setFilter] = useState(null);
-  const [info, setInfo] = useState({
+  const [infoMorty, setInfoMorty] = useState({
+    count: 0
+  });
+  const [infoRick, setInfoRick] = useState({
     count: 0
   });
   const [showModal, setShowModal] = useState<boolean>(false);
@@ -22,25 +25,44 @@ function App() {
   // console.log(characters, error)
 
   const getCharactersByPagination = async (page: number) => {
+    if (filter == "rick" || filter == null) {
+      await getCharacters({
+        variables: {
+          page: page,
+          filter: { name: "rick" }
+        },
 
-    await getCharacters({
-      variables: {
-        page: page
-      },
+      }).then(data => {
+        setCharacters((prev: any) => [...prev, ...data.data.characters.results].sort((a: any, b: any) => Number(a.id) < Number(b.id) ? -1 : 1));
+        setInfoRick(data.data.characters.info);
+        setPage(prev => prev + 1);
+      })
+    }
 
-    }).then(data => {
-      setCharacters((prev: any) => [...prev, ...data.data.characters.results.filter((e: any) => e.name.toLowerCase().includes("rick") || e.name.toLowerCase().includes("morty"))]);
-      setInfo(data.data.characters.info);
-      setPage(prev => prev + 1);
-    })
+    if (filter == "morty" || filter == null) {
+      await getCharacters({
+        variables: {
+          page: page,
+          filter: { name: "morty" }
+        },
+
+      }).then(data => {
+        setCharacters((prev: any) => [...prev, ...data.data.characters.results].sort((a: any, b: any) => Number(a.id) < Number(b.id) ? -1 : 1));
+        setInfoMorty(data.data.characters.info);
+        setPage(prev => prev + 1);
+      })
+    }
   }
 
 
   useEffect(() => {
+    setPage(1)
+    setCharacters([])
+    setInfoRick({ count: 0 })
+    setInfoMorty({ count: 0 })
+    getCharactersByPagination(1)
 
-    getCharactersByPagination(page)
-
-  }, [])
+  }, [filter])
 
 
   return (
@@ -54,7 +76,7 @@ function App() {
         <InfiniteScroll
           dataLength={characters.length} //This is important field to render the next data
           next={() => getCharactersByPagination(page + 1)}
-          hasMore={info.count > characters.length}
+          hasMore={infoRick.count + infoMorty.count > characters.length}
           loader={<h4>Loading...</h4>}
           endMessage={
             <p style={{ textAlign: 'center' }}>

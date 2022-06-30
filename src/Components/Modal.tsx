@@ -25,14 +25,14 @@ function Modal({ showModal, setShowModal, setFilter, filter }: ModalPropsType) {
                         <label className="form-check-label" htmlFor="Rick">
                             Rick
                         </label>
-                        <input className="form-check-input" type="radio" value={"Rick"} name="RickAndMorty" id="Rick" checked={filter == "Rick"} onChange={e => setFilter(e.target.value)} />
+                        <input className="form-check-input" type="radio" value={"rick"} name="RickAndMorty" id="Rick" checked={filter == "Rick"} onChange={e => setFilter(e.target.value)} />
 
                     </div>
                     <div className="form-check">
                         <label className="form-check-label" htmlFor="Morty">
                             Morty
                         </label>
-                        <input className="form-check-input" type="radio" name="RickAndMorty" value={"Morty"} id="Morty" checked={filter == "Morty"} onChange={e => setFilter(e.target.value)} />
+                        <input className="form-check-input" type="radio" name="RickAndMorty" value={"morty"} id="Morty" checked={filter == "Morty"} onChange={e => setFilter(e.target.value)} />
 
                     </div>
 
